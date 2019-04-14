@@ -3,6 +3,8 @@ package com.insightfullogic.java8.exercises.chapter4;
 import com.insightfullogic.java8.examples.chapter1.Artist;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class Artists {
 
@@ -12,23 +14,17 @@ public class Artists {
         this.artists = artists;
     }
 
-    public Artist getArtist(int index) {
+    public Optional<Artist> getArtist(int index) {
         if (index < 0 || index >= artists.size()) {
-            indexException(index);
+            return Optional.empty();
         }
-        return artists.get(index);
-    }
-
-    private void indexException(int index) {
-        throw new IllegalArgumentException(index + 
-                                           " doesn't correspond to an Artist");
+        return Optional.of(artists.get(index));
     }
 
     public String getArtistName(int index) {
         try {
-            Artist artist = getArtist(index);
-            return artist.getName();
-        } catch (IllegalArgumentException e) {
+            return getArtist(index).get().getName();
+        } catch (NoSuchElementException e) {
             return "unknown";
         }
     }
